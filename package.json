@@ -1,0 +1,20 @@
+{
+  "name": "purescript-undefined-or",
+  "version": "1.0.0",
+  "description": "Purescript library for foreign records with missing fields",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "purescript-undefined-or"
+  },
+  "keywords": [
+    "purescript",
+    "ffi"
+  ],
+  "author": "d86leader",
+  "license": "MIT",
+  "devDependencies": {
+    "purescript": "^0.13.6",
+    "spago": "^0.14.0"
+  }
+}
