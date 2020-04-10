@@ -1,3 +1,4 @@
 node_modules/
 .spago/
 output/
+bower_components/
