@@ -1,3 +1,8 @@
+-- Author: d86leader@mail.com
+-- License: MIT License; you should have received a copy of the license text
+--  with this source file; if you haven't, see:
+--  https://github.com/d86leader/purescript-undefined-or/blob/master/LICENSE
+
 -- | A lot of JS functions accept and return records where some fields may be
 -- | missing. For missing fields in argument records you can use `Data.Options`
 -- | module. For missing fields in return records you can either use `Foreign`
