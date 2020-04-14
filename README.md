@@ -35,3 +35,12 @@ You should avoid using this library whenever possible, as it's a shortcut:
 it lifts the neccessity of data validation from you, the ffi-bindings
 writer, to the user of your api. Also 75% of the use cases can be covered
 by clever use of typeclasses.
+
+## License
+
+This library is licensed under [MIT license](./LICENSE)
+
+## Documentation
+
+Module documentations is
+[published on Pursuit](https://pursuit.purescript.org/packages/purescript-undefined-or/docs/Data.UndefinedOr).
