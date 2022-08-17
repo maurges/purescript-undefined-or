@@ -7,16 +7,17 @@
     "type": "git",
     "url": "purescript-undefined-or"
   },
-  "keywords": [
-    "purescript",
-    "ffi"
-  ],
+  "scripts": {
+    "test": "spago -x test.spago.dhall test",
+    "build": "spago build"
+  },
+  "keywords": ["purescript", "ffi"],
   "author": "d86leader",
   "license": "MIT",
   "devDependencies": {
-    "purescript": "^0.13.6",
-    "spago": "^0.14.0",
-    "pulp": "^14.0.0",
-    "bower": "^1.8.8"
+    "purescript": "^0.15.4",
+    "spago": "^0.20.9",
+    "pulp": "^16.0.2",
+    "bower": "^1.8.14"
   }
 }

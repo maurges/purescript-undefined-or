@@ -1,7 +1,5 @@
-"use strict";
-
-exports.isUndefined = function(val) {
-    return val == undefined;
+export function isUndefined (val) {
+  return val == undefined
 }
 
-exports.undefinedVal = undefined;
+export const undefinedVal = undefined

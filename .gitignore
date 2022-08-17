@@ -2,3 +2,4 @@ node_modules/
 .spago/
 output/
 bower_components/
+.psc-ide-port
