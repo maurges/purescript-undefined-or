@@ -39,9 +39,10 @@
 -- |
 -- | You should especially Not use this over Maybe.
 -- |
--- | Please also note that this (althoug it seems like a instance of) is not Functor
--- | The implementation does not obey the functor-laws 
+-- | Please also note that this is not Functor as 
+-- | the implementation for `map` does not obey the functor-laws 
 -- | (see the [discussion in this issue](https://github.com/d86leader/purescript-undefined-or/issues/4))
+-- | 
 -- | For convenience this module exposes similary named functions as instances for `Functor`, `Apply`
 -- | `Applicative`, `Alt` and `Plus` would.
 module Data.UndefinedOr
@@ -100,13 +101,13 @@ instance eqUndefined :: Eq a => Eq (UndefinedOr a) where
       | not (isUndefined ux) && not (isUndefined uy) -> eq x y
     _ -> false
 
--- | unlawful version of `map` - caution does not obey the functor laws
+-- | unlawful version of `map`. Caution does not obey the functor laws
 map :: forall a b. (a -> b) -> UndefinedOr a -> UndefinedOr b
 map f u@(UndefinedOr x) =
   if isUndefined u then undefinedVal
   else UndefinedOr (f x)
 
--- | unlawful version of `apply` - caution does not obey the functor laws
+-- | unlawful version of `apply`. Caution does not obey the functor laws
 apply :: forall a b. UndefinedOr (a -> b) -> UndefinedOr a -> UndefinedOr b
 apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
   if isUndefined uf || isUndefined ux then undefinedVal
@@ -116,7 +117,7 @@ apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
 pure :: forall a. a -> UndefinedOr a
 pure = toUndefined
 
--- | unlawful version of `alt` - caution does not obey the functor laws
+-- | unlawful version of `alt`. Caution does not obey the functor laws
 alt :: forall a. UndefinedOr a -> UndefinedOr a -> UndefinedOr a
 alt x y =
   if isUndefined x then y
