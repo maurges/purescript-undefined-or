@@ -1,3 +1,1 @@
-"use strict";
-
-exports.dict = {"yes": "yes"};
+export const dict = { yes: 'yes' }

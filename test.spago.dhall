@@ -1,6 +1,7 @@
 let conf = ./spago.dhall
 let deps =
     [ "effect"
+    , "aff"
     , "spec"
     ]
 
