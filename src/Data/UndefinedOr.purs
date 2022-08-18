@@ -70,11 +70,11 @@ import Data.Maybe (Maybe(Just, Nothing))
 -- | run `fromUndefined` and use Maybe's instances.
 newtype UndefinedOr a = UndefinedOr a
 
--- | Check if the value is present
+-- | Check if the value is present.
 foreign import isUndefined :: forall a. UndefinedOr a -> Boolean
 foreign import undefinedVal :: forall a. UndefinedOr a
 
--- | Convert to `Maybe`, returning `Nothing` if the value is missing
+-- | Convert to `Maybe`, returning `Nothing` if the value is missing.
 fromUndefined :: forall a. UndefinedOr a -> Maybe a
 fromUndefined u@(UndefinedOr x) =
   if isUndefined u then Nothing
@@ -88,7 +88,7 @@ fromUndefined u@(UndefinedOr x) =
 toUndefined :: forall a. a -> UndefinedOr a
 toUndefined = UndefinedOr
 
--- | Like `maybe` but for undefined
+-- | Like `maybe` but for undefined.
 runUndefined :: forall a b. b -> (a -> b) -> UndefinedOr a -> b
 runUndefined b f u@(UndefinedOr a) =
   if isUndefined u then b
@@ -101,13 +101,13 @@ instance eqUndefined :: Eq a => Eq (UndefinedOr a) where
       | not (isUndefined ux) && not (isUndefined uy) -> eq x y
     _ -> false
 
--- | unlawful version of `map`. Caution does not obey the functor laws
+-- | Unlawful version of `map`. Caution: Does not obey the functor laws.
 map :: forall a b. (a -> b) -> UndefinedOr a -> UndefinedOr b
 map f u@(UndefinedOr x) =
   if isUndefined u then undefinedVal
   else UndefinedOr (f x)
 
--- | unlawful version of `apply`. Caution does not obey the functor laws
+-- | Unlawful version of `apply`. Caution: Does not obey the functor laws.
 apply :: forall a b. UndefinedOr (a -> b) -> UndefinedOr a -> UndefinedOr b
 apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
   if isUndefined uf || isUndefined ux then undefinedVal
@@ -117,13 +117,13 @@ apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
 pure :: forall a. a -> UndefinedOr a
 pure = toUndefined
 
--- | unlawful version of `alt`. Caution does not obey the functor laws
+-- | Unlawful version of `alt`. Caution: Does not obey the functor laws.
 alt :: forall a. UndefinedOr a -> UndefinedOr a -> UndefinedOr a
 alt x y =
   if isUndefined x then y
   else x
 
--- | alias for `undefinedVal`
+-- | Alias for `undefinedVal`.
 empty :: forall a. UndefinedOr a
 empty = undefinedVal
 
