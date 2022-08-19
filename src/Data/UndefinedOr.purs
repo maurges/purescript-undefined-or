@@ -38,16 +38,28 @@
 -- | by clever use of typeclasses.
 -- |
 -- | You should especially Not use this over Maybe.
+-- |
+-- | Please also note that this is not Functor as 
+-- | the implementation for `map` does not obey the functor-laws 
+-- | (see the [discussion in this issue](https://github.com/d86leader/purescript-undefined-or/issues/4))
+-- | 
+-- | For convenience this module exposes similary named functions as instances for `Functor`, `Apply`
+-- | `Applicative`, `Alt` and `Plus` would.
 module Data.UndefinedOr
-    ( UndefinedOr, isUndefined
-    , fromUndefined, toUndefined, runUndefined
-    ) where
+  ( UndefinedOr
+  , isUndefined
+  , fromUndefined
+  , toUndefined
+  , runUndefined
+  , map
+  , apply
+  , pure
+  , alt
+  , empty
+  ) where
 
 import Prelude
-import Data.Maybe (Maybe (Just, Nothing))
-import Control.Alt (class Alt)
-import Control.Plus (class Plus)
-
+import Data.Maybe (Maybe(Just, Nothing))
 
 -- | Wrapper for foreign values which may be undefined.
 -- |
@@ -58,17 +70,15 @@ import Control.Plus (class Plus)
 -- | run `fromUndefined` and use Maybe's instances.
 newtype UndefinedOr a = UndefinedOr a
 
--- | Check if the value is present
+-- | Check if the value is present.
 foreign import isUndefined :: forall a. UndefinedOr a -> Boolean
 foreign import undefinedVal :: forall a. UndefinedOr a
 
-
--- | Convert to `Maybe`, returning `Nothing` if the value is missing
+-- | Convert to `Maybe`, returning `Nothing` if the value is missing.
 fromUndefined :: forall a. UndefinedOr a -> Maybe a
 fromUndefined u@(UndefinedOr x) =
-    if isUndefined u
-        then Nothing
-        else Just x
+  if isUndefined u then Nothing
+  else Just x
 
 -- | Wrap a value. Useful for equality checks with a foreign value without
 -- | having to unwrap it.
@@ -78,46 +88,46 @@ fromUndefined u@(UndefinedOr x) =
 toUndefined :: forall a. a -> UndefinedOr a
 toUndefined = UndefinedOr
 
--- | Like `maybe` but for undefined
+-- | Like `maybe` but for undefined.
 runUndefined :: forall a b. b -> (a -> b) -> UndefinedOr a -> b
 runUndefined b f u@(UndefinedOr a) =
-    if isUndefined u
-        then b
-        else f a
-
+  if isUndefined u then b
+  else f a
 
 instance eqUndefined :: Eq a => Eq (UndefinedOr a) where
-    eq ux@(UndefinedOr x) uy@(UndefinedOr y) = case unit of
-      _ | isUndefined ux && isUndefined uy -> true
-        | not (isUndefined ux) && not (isUndefined uy) -> eq x y
-      _ -> false
+  eq ux@(UndefinedOr x) uy@(UndefinedOr y) = case unit of
+    _
+      | isUndefined ux && isUndefined uy -> true
+      | not (isUndefined ux) && not (isUndefined uy) -> eq x y
+    _ -> false
 
-instance functorUndefined :: Functor UndefinedOr where
-    map f u@(UndefinedOr x) =
-        if isUndefined u
-            then undefinedVal
-            else UndefinedOr (f x)
+-- | Unlawful version of `map`. Caution: Does not obey the functor laws.
+map :: forall a b. (a -> b) -> UndefinedOr a -> UndefinedOr b
+map f u@(UndefinedOr x) =
+  if isUndefined u then undefinedVal
+  else UndefinedOr (f x)
 
-instance applyUndefined :: Apply UndefinedOr where
-    apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
-        if isUndefined uf || isUndefined ux
-            then undefinedVal
-            else UndefinedOr (f x)
+-- | Unlawful version of `apply`. Caution: Does not obey the functor laws.
+apply :: forall a b. UndefinedOr (a -> b) -> UndefinedOr a -> UndefinedOr b
+apply uf@(UndefinedOr f) ux@(UndefinedOr x) =
+  if isUndefined uf || isUndefined ux then undefinedVal
+  else UndefinedOr (f x)
 
-instance applicativeUndefined :: Applicative UndefinedOr where
-    pure = toUndefined
+-- | alias for `toUndefined`
+pure :: forall a. a -> UndefinedOr a
+pure = toUndefined
 
-instance altUndefined :: Alt UndefinedOr where
-    alt x y =
-        if isUndefined x
-            then y
-            else x
+-- | Unlawful version of `alt`. Caution: Does not obey the functor laws.
+alt :: forall a. UndefinedOr a -> UndefinedOr a -> UndefinedOr a
+alt x y =
+  if isUndefined x then y
+  else x
 
-instance plusUndefined :: Plus UndefinedOr where
-    empty = undefinedVal
+-- | Alias for `undefinedVal`.
+empty :: forall a. UndefinedOr a
+empty = undefinedVal
 
 instance showUndefined :: Show a => Show (UndefinedOr a) where
-    show u@(UndefinedOr x) =
-        if isUndefined u
-            then "undefined"
-            else show x
+  show u@(UndefinedOr x) =
+    if isUndefined u then "undefined"
+    else show x
